@@ -1,4 +1,4 @@
-import React, {createContext, useEffect, useState} from "react";
+import React, { createContext, useEffect, useState } from "react";
 import { Expense } from "../models/Expense";
 import { RecurringExpense } from "../models/RecurringExpense";
 import { Category } from "../models/Category";
@@ -18,6 +18,7 @@ interface StateContext {
         recurringExpenseId: string | null,
     };
     setApiKey: (value: string) => void,
+    setClientId: (value: string) => void,
     removeApiKey: () => void,
     setSelected: (value: string, keyName: string) => void,
     getSetExpenses: () => Promise<void>,
@@ -39,6 +40,7 @@ export const StateContext = createContext<StateContext>({
         recurringExpenseId: null,
     },
     setApiKey: () => {},
+    setClientId: () => {},
     removeApiKey: () => {},
     setSelected: () => {},
     getSetExpenses: () => new Promise(() => {}),
@@ -50,6 +52,7 @@ export const StateContext = createContext<StateContext>({
 export const StateProvider = ({ children }: { children: React.ReactNode }): JSX.Element => {
     const [apiKey, _setApiKey] = useState('');
     const [apiKeyExists, setApiKeyExists] = useState(false);
+    const [clientId, setClientId] = useState('');
     const [expenses, setExpenses] = useState([] as Expense[]);
     const [recurringExpenses, setRecurringExpenses] = useState([] as RecurringExpense[]);
     const [categories, setCategories] = useState([] as Category[]);
@@ -75,19 +78,19 @@ export const StateProvider = ({ children }: { children: React.ReactNode }): JSX.
     }
 
     async function getSetExpenses(): Promise<void> {
-        const response = await getExpenses(apiKey);
+        const response = await getExpenses(apiKey, clientId);
         setExpenses(response);
     }
     async function getSetRecurringExpenses(): Promise<void> {
-        const response = await getRecurringExpenses(apiKey);
+        const response = await getRecurringExpenses(apiKey, clientId);
         setRecurringExpenses(response);
     }
     async function getSetCategories(): Promise<void> {
-        const response = await getCategories(apiKey);
+        const response = await getCategories(apiKey, clientId);
         setCategories(response);
     }
     async function getSetPaymentTypes(): Promise<void> {
-        const response = await getPaymentTypes(apiKey);
+        const response = await getPaymentTypes(apiKey, clientId);
         setPaymentTypes(response);
     }
 
@@ -111,6 +114,7 @@ export const StateProvider = ({ children }: { children: React.ReactNode }): JSX.
                 selected,
 
                 setApiKey,
+                setClientId,
                 removeApiKey,
                 setSelected,
                 getSetExpenses,
