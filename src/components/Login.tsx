@@ -5,12 +5,13 @@ export const LoginComponent = () => {
     const [apiKeySecret, setApiKeySecret] = useState('');
     const [apiKeyId, setApiKeyId] = useState('');
     const [clientId, _setClientId] = useState('');
-    const { apiKeyExists, setApiKey, setClientId, removeApiKey } = useContext(StateContext);
+    const { apiKeyExists, setApiKey, fetchData, setClientId, removeApiKey } = useContext(StateContext);
 
-    function setEncodeApiKey() {
+    function Login() {
         const base64Encoded = btoa(`${apiKeyId}:${apiKeySecret}`);
         setClientId(clientId);
         setApiKey(base64Encoded);
+        fetchData();
     }
 
     if (apiKeyExists) {
@@ -30,7 +31,7 @@ export const LoginComponent = () => {
             <input value={apiKeySecret} onChange={(v) => setApiKeySecret(v.target.value) } />
             <label>Client Id</label>
             <input value={clientId} onChange={(v) => _setClientId(v.target.value)} />
-            <button onClick={() => setEncodeApiKey()}>Login</button>
+            <button onClick={() => Login()}>Login</button>
         </div>
     );
 }

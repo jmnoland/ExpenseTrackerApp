@@ -1,16 +1,16 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useState } from "react";
 import { Expense } from "../models/Expense";
 import { RecurringExpense } from "../models/RecurringExpense";
 import { Category } from "../models/Category";
 import { PaymentType } from "../models/PaymentType";
 import { getExpenses, getRecurringExpenses, getPaymentTypes, getCategories } from "../api";
 
-interface StateContext {
+interface IStateContext {
     apiKeyExists: boolean,
     expenses: Expense[];
     recurringExpenses: RecurringExpense[];
-    categories: Category[];
-    paymentTypes: PaymentType[];
+    categories: Record<string, Category>;
+    paymentTypes: Record<string, PaymentType>;
     selected: {
         categoryId: string | null,
         paymentTypeId: string | null,
@@ -25,14 +25,15 @@ interface StateContext {
     getSetRecurringExpenses: () => Promise<void>,
     getSetCategories: () => Promise<void>,
     getSetPaymentTypes: () => Promise<void>,
+    fetchData: () => Promise<void>,
 }
 
-export const StateContext = createContext<StateContext>({
+export const StateContext = createContext<IStateContext>({
     apiKeyExists: false,
     expenses: [],
     recurringExpenses: [],
-    categories: [],
-    paymentTypes: [],
+    categories: {},
+    paymentTypes: {},
     selected: {
         categoryId: null,
         paymentTypeId: null,
@@ -47,6 +48,7 @@ export const StateContext = createContext<StateContext>({
     getSetRecurringExpenses: () => new Promise(() => {}),
     getSetCategories: () => new Promise(() => {}),
     getSetPaymentTypes: () => new Promise(() => {}),
+    fetchData: () => new Promise(() => {}),
 });
 
 export const StateProvider = ({ children }: { children: React.ReactNode }): JSX.Element => {
@@ -55,8 +57,8 @@ export const StateProvider = ({ children }: { children: React.ReactNode }): JSX.
     const [clientId, setClientId] = useState('');
     const [expenses, setExpenses] = useState([] as Expense[]);
     const [recurringExpenses, setRecurringExpenses] = useState([] as RecurringExpense[]);
-    const [categories, setCategories] = useState([] as Category[]);
-    const [paymentTypes, setPaymentTypes] = useState([] as PaymentType[]);
+    const [categories, setCategories] = useState({} as Record<string, Category>);
+    const [paymentTypes, setPaymentTypes] = useState({} as Record<string, PaymentType>);
     const [selected, _setSelected] = useState({
         categoryId: null,
         paymentTypeId: null,
@@ -87,21 +89,27 @@ export const StateProvider = ({ children }: { children: React.ReactNode }): JSX.
     }
     async function getSetCategories(): Promise<void> {
         const response = await getCategories(apiKey, clientId);
-        setCategories(response);
+        const newCategories = response.reduce((total, category) => {
+            total[category.categoryId] = category;
+            return total;
+        }, {} as Record<string, Category>);
+        setCategories(newCategories);
     }
     async function getSetPaymentTypes(): Promise<void> {
         const response = await getPaymentTypes(apiKey, clientId);
-        setPaymentTypes(response);
+        const newPaymentTypes = response.reduce((total, paymentType) => {
+            total[paymentType.paymentTypeId] = paymentType;
+            return total;
+        }, {} as Record<string, PaymentType>);
+        setPaymentTypes(newPaymentTypes);
     }
 
-    useEffect(() => {
-        if (apiKey !== '') {
-            getSetExpenses();
-            getSetRecurringExpenses();
-            getSetPaymentTypes();
-            getSetCategories();
-        }
-    }, [apiKey]);
+    async function fetchData(): Promise<void> {
+        getSetCategories();
+        getSetPaymentTypes();
+        getSetExpenses();
+        getSetRecurringExpenses();
+    }
 
     return (
         <StateContext.Provider
@@ -120,7 +128,8 @@ export const StateProvider = ({ children }: { children: React.ReactNode }): JSX.
                 getSetExpenses,
                 getSetRecurringExpenses,
                 getSetCategories,
-                getSetPaymentTypes
+                getSetPaymentTypes,
+                fetchData,
             }}
         >
             {children}

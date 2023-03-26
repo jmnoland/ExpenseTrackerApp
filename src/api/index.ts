@@ -19,7 +19,9 @@ export async function getExpenses(apiKey: string, clientId: string): Promise<Exp
         }
     });
     const body = await response.json() as GetResponse<Expense[]>;
-    return body.responseObject;
+    return body.responseObject.map(expense => {
+        return { ...expense, date: new Date(expense.date) } as Expense
+    });
 }
 
 export async function getRecurringExpenses(apiKey: string, clientId: string): Promise<RecurringExpense[]> {
@@ -36,7 +38,14 @@ export async function getRecurringExpenses(apiKey: string, clientId: string): Pr
         }
     });
     const body = await response.json() as GetResponse<RecurringExpense[]>;
-    return body.responseObject;
+    return body.responseObject.map(recurringExpense => {
+        return {
+            ...recurringExpense,
+            startDate: new Date(recurringExpense.startDate),
+            endDate: recurringExpense.endDate !== null ? new Date(recurringExpense.endDate) : null,
+            lastExpenseDate: recurringExpense.lastExpenseDate !== null ? new Date(recurringExpense.lastExpenseDate) : null,
+        } as RecurringExpense
+    });
 }
 
 export async function getCategories(apiKey: string, clientId: string): Promise<Category[]> {
@@ -53,7 +62,9 @@ export async function getCategories(apiKey: string, clientId: string): Promise<C
         }
     });
     const body = await response.json() as GetResponse<Category[]>;
-    return body.responseObject;
+    return body.responseObject.map(category => {
+        return { ...category, createdAt: new Date(category.createdAt) } as Category
+    });
 }
 
 export async function getPaymentTypes(apiKey: string, clientId: string): Promise<PaymentType[]> {
@@ -70,5 +81,10 @@ export async function getPaymentTypes(apiKey: string, clientId: string): Promise
         }
     });
     const body = await response.json() as GetResponse<PaymentType[]>;
-    return body.responseObject;
+    return body.responseObject.map(paymentType => {
+        return {
+            ...paymentType,
+            archivedAt: paymentType.archivedAt !== null ? new Date(paymentType.archivedAt) : null,
+        } as PaymentType
+    });
 }
