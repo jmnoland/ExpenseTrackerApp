@@ -3,10 +3,10 @@ import { StateContext } from "../contexts/StateContext";
 import Container from "./shared/Container";
 
 export const PaymentTypeComponent = () => {
-    const { paymentTypes } = useContext(StateContext);
+    const { paymentTypes, toggleSelect } = useContext(StateContext);
     const paymentTypeRows = Object.keys(paymentTypes).map(key => {
         const paymentType = paymentTypes[key];
-        return <tr key={paymentType.paymentTypeId}>
+        return <tr key={paymentType.paymentTypeId} onClick={() => toggleSelect(paymentType.paymentTypeId, 'paymentTypeId')}>
             <td style={{ width: '200px' }}>{paymentType.name}</td>
             <td style={{ width: '150px' }}>{paymentType.charge}</td>
         </tr>

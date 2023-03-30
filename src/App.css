@@ -1,10 +1,15 @@
+body {
+    background-color: #1d2228;
+    color: #e1e2e2;
+}
+
 table {
     text-align: left;
     position: relative;
 }
 
 th {
-    background: white;
+    background: #1d2228;
     position: sticky;
     top: 0;
 }

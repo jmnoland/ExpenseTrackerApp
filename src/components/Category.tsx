@@ -4,10 +4,10 @@ import { parseDateTime } from "../helpers/DateHelper";
 import Container from "./shared/Container";
 
 export const CategoryComponent = () => {
-    const { categories } = useContext(StateContext);
+    const { categories, toggleSelect } = useContext(StateContext);
     const categoryRows = Object.keys(categories).map(key => {
         const category = categories[key];
-        return <tr key={category.categoryId}>
+        return <tr key={category.categoryId} onClick={() => toggleSelect(category.categoryId, 'categoryId')}>
             <td style={{ width: '200px' }}>{category.name}</td>
             <td style={{ width: '150px' }}>{parseDateTime(category.createdAt)}</td>
         </tr>

@@ -7,20 +7,17 @@ import { getExpenses, getRecurringExpenses, getPaymentTypes, getCategories } fro
 
 interface IStateContext {
     apiKeyExists: boolean,
+    dataFetched: boolean,
     expenses: Expense[];
     recurringExpenses: RecurringExpense[];
     categories: Record<string, Category>;
     paymentTypes: Record<string, PaymentType>;
-    selected: {
-        categoryId: string | null,
-        paymentTypeId: string | null,
-        expenseId: string | null,
-        recurringExpenseId: string | null,
-    };
+    selected: Record<string, string |null>;
     setApiKey: (value: string) => void,
     setClientId: (value: string) => void,
     removeApiKey: () => void,
-    setSelected: (value: string, keyName: string) => void,
+    setSelected: (value: string | null, keyName: string) => void,
+    toggleSelect: (value: string | null, keyName: string) => void,
     getSetExpenses: () => Promise<void>,
     getSetRecurringExpenses: () => Promise<void>,
     getSetCategories: () => Promise<void>,
@@ -30,6 +27,7 @@ interface IStateContext {
 
 export const StateContext = createContext<IStateContext>({
     apiKeyExists: false,
+    dataFetched: false,
     expenses: [],
     recurringExpenses: [],
     categories: {},
@@ -44,6 +42,7 @@ export const StateContext = createContext<IStateContext>({
     setClientId: () => {},
     removeApiKey: () => {},
     setSelected: () => {},
+    toggleSelect: () => {},
     getSetExpenses: () => new Promise(() => {}),
     getSetRecurringExpenses: () => new Promise(() => {}),
     getSetCategories: () => new Promise(() => {}),
@@ -54,6 +53,7 @@ export const StateContext = createContext<IStateContext>({
 export const StateProvider = ({ children }: { children: React.ReactNode }): JSX.Element => {
     const [apiKey, _setApiKey] = useState('');
     const [apiKeyExists, setApiKeyExists] = useState(false);
+    const [dataFetched, setDataFetched] = useState(false);
     const [clientId, setClientId] = useState('');
     const [expenses, setExpenses] = useState([] as Expense[]);
     const [recurringExpenses, setRecurringExpenses] = useState([] as RecurringExpense[]);
@@ -64,7 +64,7 @@ export const StateProvider = ({ children }: { children: React.ReactNode }): JSX.
         paymentTypeId: null,
         expenseId: null,
         recurringExpenseId: null,
-    });
+    } as Record<string, string | null>);
 
     function setApiKey(value: string): void {
         _setApiKey(value);
@@ -73,10 +73,15 @@ export const StateProvider = ({ children }: { children: React.ReactNode }): JSX.
     function removeApiKey(): void {
         _setApiKey('');
         setApiKeyExists(false);
+        setDataFetched(false);
     }
-    function setSelected(value: string, keyName: string): void {
+    function setSelected(value: string | null, keyName: string): void {
         const newSelected = { ...selected, [keyName]: value };
         _setSelected(newSelected);
+    }
+    function toggleSelect(value: string | null, keyName: string): void {
+        if (value === selected[keyName]) setSelected(null, keyName);
+        else setSelected(value, keyName);
     }
 
     async function getSetExpenses(): Promise<void> {
@@ -105,16 +110,18 @@ export const StateProvider = ({ children }: { children: React.ReactNode }): JSX.
     }
 
     async function fetchData(): Promise<void> {
-        getSetCategories();
-        getSetPaymentTypes();
+        setDataFetched(true);
+        await getSetCategories();
+        await getSetPaymentTypes();
+        await getSetRecurringExpenses();
         getSetExpenses();
-        getSetRecurringExpenses();
     }
 
     return (
         <StateContext.Provider
             value={{
                 apiKeyExists,
+                dataFetched,
                 expenses,
                 recurringExpenses,
                 categories,
@@ -125,6 +132,7 @@ export const StateProvider = ({ children }: { children: React.ReactNode }): JSX.
                 setClientId,
                 removeApiKey,
                 setSelected,
+                toggleSelect,
                 getSetExpenses,
                 getSetRecurringExpenses,
                 getSetCategories,
