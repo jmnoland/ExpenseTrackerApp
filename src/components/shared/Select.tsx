@@ -13,12 +13,13 @@ export default function Select({ initialValue, setSelected, options }: SelectPro
     const [displayOptions, setDisplayOptions] = useState(false);
 
     useEffect(() => {
+        document.removeEventListener('keydown', enterPressed);
         document.addEventListener('keydown', enterPressed);
 
         return () => {
             document.removeEventListener('keydown', enterPressed);
         }
-    }, []);
+    }, [value]);
 
     function enterPressed(event: any) {
         if (event.keyCode === 13) {
