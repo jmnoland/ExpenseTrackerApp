@@ -2,12 +2,13 @@ import React, {useEffect, useState} from 'react';
 import { SelectOption } from "../../models/SelectOption";
 
 type SelectProps = {
+    width: number;
     initialValue: string | undefined;
     setSelected: (value: string) => void;
     options: SelectOption[];
 }
 
-export default function Select({ initialValue, setSelected, options }: SelectProps): JSX.Element {
+export default function Select({ width, initialValue, setSelected, options }: SelectProps): JSX.Element {
     const initialOptionName = initialValue === undefined ? '' : searchOptionById(initialValue)?.name ?? '';
     const [value, setValue] = useState(initialOptionName);
     const [displayOptions, setDisplayOptions] = useState(false);
@@ -47,19 +48,25 @@ export default function Select({ initialValue, setSelected, options }: SelectPro
         setDisplayOptions(false);
     }
     const optionElements = options.map(option => {
-        return <div key={option.id} onClick={() => _setSelected(option.id, option.name)}>{option.name}</div>
+        return <div
+            id={option.id}
+            key={option.id}
+            className={"option"}
+            onClick={() => _setSelected(option.id, option.name)}
+        >{option.name}</div>
     });
 
     return (
         <div>
             <input
+                style={{ width: width }}
                 value={value}
                 onFocus={() => setDisplayOptions(true)}
                 onChange={(e) => setValue(e.target.value)}
             />
-            <div>
-                {displayOptions ? optionElements : null}
-            </div>
+            {displayOptions ? <div style={{ width: width }} className={"options-container"}>
+                {optionElements}
+            </div> : null }
         </div>
     );
 }

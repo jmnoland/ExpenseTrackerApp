@@ -13,3 +13,20 @@ th {
     position: sticky;
     top: 0;
 }
+.options-container {
+    position: absolute;
+    max-height: 84px;
+    overflow-y: auto;
+    background-color: white;
+    color: black;
+    padding: 2px;
+    border: 2px solid #1d2228;
+    cursor: pointer;
+    z-index: 1;
+}
+.option {
+    padding: 2px;
+}
+.option:hover {
+    background-color: #34a95680;
+}
