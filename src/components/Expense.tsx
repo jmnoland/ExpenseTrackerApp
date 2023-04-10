@@ -17,23 +17,21 @@ export const ExpenseComponent = () => {
 
     return (
         <div>
-            <Container title={'Expenses'}>
-                <div style={{ maxHeight: '300px', overflow: 'auto' }}>
-                    <table>
-                        <thead>
-                        <tr>
-                            <th style={{ width: '200px' }}>Name</th>
-                            <th style={{ width: '150px' }}>Amount</th>
-                            <th style={{ width: '150px' }}>Category</th>
-                            <th style={{ width: '150px' }}>Payment Type</th>
-                            <th style={{ width: '150px' }}>Date</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                            {expenseRows}
-                        </tbody>
-                    </table>
-                </div>
+            <Container title={'Expenses'} maxHeight={250} overflow={true}>
+                <table>
+                    <thead>
+                    <tr>
+                        <th style={{ width: '200px' }}>Name</th>
+                        <th style={{ width: '150px' }}>Amount</th>
+                        <th style={{ width: '150px' }}>Category</th>
+                        <th style={{ width: '150px' }}>Payment Type</th>
+                        <th style={{ width: '150px' }}>Date</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {expenseRows}
+                    </tbody>
+                </table>
             </Container>
         </div>
     );

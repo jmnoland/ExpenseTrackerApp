@@ -14,10 +14,12 @@ function App() {
             <NotificationProvider>
                 <StateProvider>
                     <LoginComponent />
-                    <ExpenseComponent />
-                    <RecurringExpenseComponent/>
-                    <CategoryComponent />
-                    <PaymentTypeComponent />
+                    <div className={"feature-container"}>
+                        <ExpenseComponent />
+                        <RecurringExpenseComponent/>
+                        <CategoryComponent />
+                        <PaymentTypeComponent />
+                    </div>
                 </StateProvider>
             </NotificationProvider>
         </div>

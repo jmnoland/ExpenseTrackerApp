@@ -4,10 +4,15 @@ import { parseDateTime } from "../helpers/DateHelper";
 import Container from "./shared/Container";
 
 export const CategoryComponent = () => {
-    const { categories, toggleSelect } = useContext(StateContext);
+    const { categories, selected, toggleSelect } = useContext(StateContext);
     const categoryRows = Object.keys(categories).map(key => {
         const category = categories[key];
-        return <tr key={category.categoryId} onClick={() => toggleSelect(category.categoryId, 'categoryId')}>
+        const classes = (selected.categoryId === key ? "selected-row" : "") + " pointer";
+        return <tr
+            className={classes}
+            key={category.categoryId}
+            onClick={() => toggleSelect(category.categoryId, 'categoryId')}
+        >
             <td style={{ width: '200px' }}>{category.name}</td>
             <td style={{ width: '150px' }}>{parseDateTime(category.createdAt)}</td>
         </tr>
@@ -15,20 +20,18 @@ export const CategoryComponent = () => {
 
     return (
         <div>
-            <Container title={'Categories'}>
-                <div style={{ maxHeight: '300px', overflow: 'auto' }}>
-                    <table>
-                        <thead>
-                        <tr>
-                            <th style={{ width: '200px' }}>Name</th>
-                            <th style={{ width: '150px' }}>Created At</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {categoryRows}
-                        </tbody>
-                    </table>
-                </div>
+            <Container title={'Categories'} maxHeight={200} overflow={true}>
+                <table>
+                    <thead>
+                    <tr>
+                        <th style={{ width: '200px' }}>Name</th>
+                        <th style={{ width: '150px' }}>Created At</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {categoryRows}
+                    </tbody>
+                </table>
             </Container>
         </div>
     );

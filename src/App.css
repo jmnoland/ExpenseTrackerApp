@@ -13,6 +13,11 @@ th {
     position: sticky;
     top: 0;
 }
+
+tr:hover {
+    background-color: #34a95680;
+}
+
 .options-container {
     position: absolute;
     max-height: 84px;
@@ -29,4 +34,22 @@ th {
 }
 .option:hover {
     background-color: #34a95680;
+}
+.selected-row {
+    background-color: #34a95680;
+}
+.pointer {
+    cursor: pointer;
+}
+
+.feature-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.title {
+    font-size: 20px;
+    font-weight: bold;
 }

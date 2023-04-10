@@ -21,25 +21,23 @@ export const RecurringExpenseComponent = () => {
 
     return (
         <div>
-            <Container title={'Recurring Expenses'}>
-                <div style={{ maxHeight: '300px', overflow: 'auto' }}>
-                    <table>
-                        <thead>
-                        <tr>
-                            <th style={{ width: '200px' }}>Name</th>
-                            <th style={{ width: '150px' }}>Amount</th>
-                            <th style={{ width: '150px' }}>Category</th>
-                            <th style={{ width: '150px' }}>Payment Type</th>
-                            <th style={{ width: '100px' }}>Frequency</th>
-                            <th style={{ width: '150px' }}>Start Date</th>
-                            <th style={{ width: '150px' }}>End Date</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {recurringExpenseRows}
-                        </tbody>
-                    </table>
-                </div>
+            <Container title={'Recurring Expenses'} maxHeight={250} overflow={true}>
+                <table>
+                    <thead>
+                    <tr>
+                        <th style={{ width: '200px' }}>Name</th>
+                        <th style={{ width: '150px' }}>Amount</th>
+                        <th style={{ width: '150px' }}>Category</th>
+                        <th style={{ width: '150px' }}>Payment Type</th>
+                        <th style={{ width: '100px' }}>Frequency</th>
+                        <th style={{ width: '150px' }}>Start Date</th>
+                        <th style={{ width: '150px' }}>End Date</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {recurringExpenseRows}
+                    </tbody>
+                </table>
             </Container>
         </div>
     );
