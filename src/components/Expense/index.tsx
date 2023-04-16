@@ -1,12 +1,16 @@
-import Container from "../shared/Container";
-import React from "react";
+import React, { useState } from "react";
+import { Container } from "../shared";
 import { ExpenseViewComponent } from "./ExpenseView";
+import { ExpenseCreateComponent } from "./ExpenseCreate";
 
 export function ExpenseComponent() {
+    const [create, setCreate] = useState(true);
+
     return (
         <div>
             <Container title={'Expenses'} maxHeight={250} overflow={true}>
-                <ExpenseViewComponent />
+                { create ? null : <ExpenseViewComponent /> }
+                { !create ? null : <ExpenseCreateComponent /> }
             </Container>
         </div>
     );

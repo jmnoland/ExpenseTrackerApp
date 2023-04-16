@@ -1,5 +1,5 @@
-import Container from "../shared/Container";
 import React from "react";
+import { Container } from "../shared";
 import { PaymentTypeViewComponent } from "./PaymentTypeView";
 
 export function PaymentTypeComponent() {

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { SelectOption } from "../../models/SelectOption";
 
 type SelectProps = {
