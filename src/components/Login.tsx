@@ -19,7 +19,6 @@ export const LoginComponent = () => {
     if (apiKeyExists) {
         return (
             <div>
-                <p>**********</p>
                 <button onClick={removeApiKey}>Logout</button>
             </div>
         );
