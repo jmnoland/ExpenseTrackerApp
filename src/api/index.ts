@@ -1,12 +1,12 @@
-import {Expense} from "../models/Expense";
-import {RecurringExpense} from "../models/RecurringExpense";
-import {Category} from "../models/Category";
-import {PaymentType} from "../models/PaymentType";
+import { Expense } from "../models/Expense";
+import { RecurringExpense } from "../models/RecurringExpense";
+import { Category } from "../models/Category";
+import { PaymentType } from "../models/PaymentType";
+import { GetResponse } from "../models/GetResponse";
 import appSettings from "../appsettings.json";
-import {GetResponse} from "../models/GetResponse";
 
 export async function getExpenses(apiKey: string, clientId: string): Promise<Expense[]> {
-    const response = await fetch(`http://${appSettings.baseUrl}/api/expense`, {
+    const response = await fetch(`${appSettings.baseUrl}/api/expense`, {
         method: 'GET',
         mode: "cors",
         cache: 'no-cache',
@@ -25,7 +25,7 @@ export async function getExpenses(apiKey: string, clientId: string): Promise<Exp
 }
 
 export async function createExpense(apiKey: string, clientId: string, body: {}): Promise<Expense> {
-    const response = await fetch(`http://${appSettings.baseUrl}/api/expense`, {
+    const response = await fetch(`${appSettings.baseUrl}/api/expense`, {
         method: 'POST',
         mode: "cors",
         cache: 'no-cache',
@@ -42,7 +42,7 @@ export async function createExpense(apiKey: string, clientId: string, body: {}):
 }
 
 export async function getRecurringExpenses(apiKey: string, clientId: string): Promise<RecurringExpense[]> {
-    const response = await fetch(`http://${appSettings.baseUrl}/api/recurringexpense`, {
+    const response = await fetch(`${appSettings.baseUrl}/api/recurringexpense`, {
         method: 'GET',
         mode: "cors",
         cache: 'no-cache',
@@ -66,7 +66,7 @@ export async function getRecurringExpenses(apiKey: string, clientId: string): Pr
 }
 
 export async function getCategories(apiKey: string, clientId: string): Promise<Category[]> {
-    const response = await fetch(`http://${appSettings.baseUrl}/api/category`, {
+    const response = await fetch(`${appSettings.baseUrl}/api/category`, {
         method: 'GET',
         mode: "cors",
         cache: 'no-cache',
@@ -85,7 +85,7 @@ export async function getCategories(apiKey: string, clientId: string): Promise<C
 }
 
 export async function getPaymentTypes(apiKey: string, clientId: string): Promise<PaymentType[]> {
-    const response = await fetch(`http://${appSettings.baseUrl}/api/paymenttype`, {
+    const response = await fetch(`${appSettings.baseUrl}/api/paymenttype`, {
         method: 'GET',
         mode: "cors",
         cache: 'no-cache',
