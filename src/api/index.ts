@@ -1,9 +1,9 @@
-import { Expense } from "../models/Expense";
-import { RecurringExpense } from "../models/RecurringExpense";
-import { Category } from "../models/Category";
-import { PaymentType } from "../models/PaymentType";
+import {Expense} from "../models/Expense";
+import {RecurringExpense} from "../models/RecurringExpense";
+import {Category} from "../models/Category";
+import {PaymentType} from "../models/PaymentType";
 import appSettings from "../appsettings.json";
-import { GetResponse } from "../models/GetResponse";
+import {GetResponse} from "../models/GetResponse";
 
 export async function getExpenses(apiKey: string, clientId: string): Promise<Expense[]> {
     const response = await fetch(`http://${appSettings.baseUrl}/api/expense`, {
@@ -22,6 +22,23 @@ export async function getExpenses(apiKey: string, clientId: string): Promise<Exp
     return body.responseObject.map(expense => {
         return { ...expense, date: new Date(expense.date) } as Expense
     });
+}
+
+export async function createExpense(apiKey: string, clientId: string, body: {}): Promise<Expense> {
+    const response = await fetch(`http://${appSettings.baseUrl}/api/expense`, {
+        method: 'POST',
+        mode: "cors",
+        cache: 'no-cache',
+        credentials: 'same-origin',
+        headers: {
+            'Authorization': `Basic ${apiKey}`,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'x-client-id': clientId,
+        },
+        body: JSON.stringify(body),
+    });
+    return await response.json() as Expense;
 }
 
 export async function getRecurringExpenses(apiKey: string, clientId: string): Promise<RecurringExpense[]> {

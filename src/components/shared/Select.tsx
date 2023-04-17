@@ -9,8 +9,7 @@ type SelectProps = {
 }
 
 export default function Select({ width, initialValue, setSelected, options }: SelectProps): JSX.Element {
-    const initialOptionName = initialValue === undefined ? '' : searchOptionById(initialValue)?.name ?? '';
-    const [value, setValue] = useState(initialOptionName);
+    const [value, setValue] = useState('');
     const [displayOptions, setDisplayOptions] = useState(false);
 
     useEffect(() => {
@@ -21,6 +20,15 @@ export default function Select({ width, initialValue, setSelected, options }: Se
             document.removeEventListener('keydown', enterPressed);
         }
     }, [value]);
+
+    useEffect(() => {
+        if (initialValue !== undefined) {
+            const initialOptionName = searchOptionById(initialValue)?.name ?? '';
+            setValue(initialOptionName);
+        } else {
+            setValue('');
+        }
+    }, [initialValue]);
 
     function enterPressed(event: any) {
         if (event.keyCode === 13) {

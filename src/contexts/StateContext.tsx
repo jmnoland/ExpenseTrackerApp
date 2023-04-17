@@ -3,7 +3,7 @@ import { Expense } from "../models/Expense";
 import { RecurringExpense } from "../models/RecurringExpense";
 import { Category } from "../models/Category";
 import { PaymentType } from "../models/PaymentType";
-import { getExpenses, getRecurringExpenses, getPaymentTypes, getCategories } from "../api";
+import { getExpenses, getRecurringExpenses, getPaymentTypes, getCategories, createExpense } from "../api";
 
 interface IStateContext {
     apiKeyExists: boolean,
@@ -22,6 +22,7 @@ interface IStateContext {
     getSetRecurringExpenses: () => Promise<void>,
     getSetCategories: () => Promise<void>,
     getSetPaymentTypes: () => Promise<void>,
+    createNewExpense: (expense: Expense) => Promise<void>,
     fetchData: () => Promise<void>,
 }
 
@@ -47,6 +48,7 @@ export const StateContext = createContext<IStateContext>({
     getSetRecurringExpenses: () => new Promise(() => {}),
     getSetCategories: () => new Promise(() => {}),
     getSetPaymentTypes: () => new Promise(() => {}),
+    createNewExpense: (expense: Expense) => new Promise(() => {}),
     fetchData: () => new Promise(() => {}),
 });
 
@@ -84,6 +86,9 @@ export const StateProvider = ({ children }: { children: React.ReactNode }): JSX.
         else setSelected(value, keyName);
     }
 
+    async function createNewExpense(expense: Expense): Promise<void> {
+        const response = await createExpense(apiKey, clientId, expense);
+    }
     async function getSetExpenses(): Promise<void> {
         const response = await getExpenses(apiKey, clientId);
         setExpenses(response);
@@ -137,6 +142,7 @@ export const StateProvider = ({ children }: { children: React.ReactNode }): JSX.
                 getSetRecurringExpenses,
                 getSetCategories,
                 getSetPaymentTypes,
+                createNewExpense,
                 fetchData,
             }}
         >
