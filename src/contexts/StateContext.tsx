@@ -3,7 +3,14 @@ import { Expense } from "../models/Expense";
 import { RecurringExpense } from "../models/RecurringExpense";
 import { Category } from "../models/Category";
 import { PaymentType } from "../models/PaymentType";
-import { getExpenses, getRecurringExpenses, getPaymentTypes, getCategories, createExpense } from "../api";
+import {
+    getExpenses,
+    getRecurringExpenses,
+    getPaymentTypes,
+    getCategories,
+    createExpense,
+    createCategory, createPaymentType,
+} from "../api";
 
 interface IStateContext {
     apiKeyExists: boolean,
@@ -23,6 +30,8 @@ interface IStateContext {
     getSetCategories: () => Promise<void>,
     getSetPaymentTypes: () => Promise<void>,
     createNewExpense: (expense: Expense) => Promise<void>,
+    createNewCategory: (name: string) => Promise<void>,
+    createNewPaymentType: (paymentType: PaymentType) => Promise<void>,
     fetchData: () => Promise<void>,
 }
 
@@ -49,6 +58,8 @@ export const StateContext = createContext<IStateContext>({
     getSetCategories: () => new Promise(() => {}),
     getSetPaymentTypes: () => new Promise(() => {}),
     createNewExpense: (expense: Expense) => new Promise(() => {}),
+    createNewCategory: (name: string) => new Promise(() => {}),
+    createNewPaymentType: (paymentType: PaymentType) => new Promise(() => {}),
     fetchData: () => new Promise(() => {}),
 });
 
@@ -88,6 +99,12 @@ export const StateProvider = ({ children }: { children: React.ReactNode }): JSX.
 
     async function createNewExpense(expense: Expense): Promise<void> {
         const response = await createExpense(apiKey, clientId, expense);
+    }
+    async function createNewCategory(name: string): Promise<void> {
+        const response = await createCategory(apiKey, clientId, name);
+    }
+    async function createNewPaymentType(paymentType: PaymentType): Promise<void> {
+        const response = await createPaymentType(apiKey, clientId, paymentType);
     }
     async function getSetExpenses(): Promise<void> {
         const response = await getExpenses(apiKey, clientId);
@@ -143,6 +160,8 @@ export const StateProvider = ({ children }: { children: React.ReactNode }): JSX.
                 getSetCategories,
                 getSetPaymentTypes,
                 createNewExpense,
+                createNewCategory,
+                createNewPaymentType,
                 fetchData,
             }}
         >
