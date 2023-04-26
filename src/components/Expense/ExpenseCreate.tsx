@@ -32,21 +32,31 @@ export function ExpenseCreateComponent() {
         }
     }, [selected]);
 
+    function reset() {
+        setName('');
+        setAmount(0);
+        setDate(new Date().toISOString());
+    }
+    function save(): void {
+        createNewExpense({
+            name,
+            amount,
+            date: new Date(date),
+            paymentTypeId,
+            categoryId
+        } as Expense);
+    }
+
     return (
       <div>
-        <Input width={100} value={name} setValue={setName} />
-        <NumberInput width={100} value={amount} setValue={setAmount} />
-        <Select width={100} initialValue={categoryId} setSelected={setCategoryId} options={categoryOptions as SelectOption[]} />
-        <Select width={100} initialValue={paymentTypeId} setSelected={setPaymentTypeId} options={paymentTypeOptions as SelectOption[]} />
-        <Input width={170} value={date} setValue={setDate} />
+        <Input label={'Name'} width={100} value={name} setValue={setName} />
+        <NumberInput label={'Amount'} width={100} value={amount} setValue={setAmount} />
+        <Select label={'Category'} width={100} initialValue={categoryId} setSelected={setCategoryId} options={categoryOptions as SelectOption[]} />
+        <Select label={'Payment type'} width={100} initialValue={paymentTypeId} setSelected={setPaymentTypeId} options={paymentTypeOptions as SelectOption[]} />
+        <Input label={'Date'} width={170} value={date} setValue={setDate} />
         <div>
-          <button onClick={() => createNewExpense({
-              name,
-              amount,
-              date: new Date(date),
-              paymentTypeId,
-              categoryId
-          } as Expense)}>Save</button>
+          <button onClick={reset}>Reset</button>
+          <button onClick={save}>Save</button>
         </div>
       </div>
     );

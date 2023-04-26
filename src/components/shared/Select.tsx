@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { SelectOption } from "../../models/SelectOption";
 
 type SelectProps = {
+    label?: string;
     width: number;
-    initialValue: string | undefined;
+    initialValue?: string;
     setSelected: (value: string) => void;
     options: SelectOption[];
 }
 
-export default function Select({ width, initialValue, setSelected, options }: SelectProps): JSX.Element {
+export default function Select({ label, width, initialValue, setSelected, options }: SelectProps): JSX.Element {
     const [value, setValue] = useState('');
     const [displayOptions, setDisplayOptions] = useState(false);
 
@@ -65,7 +66,8 @@ export default function Select({ width, initialValue, setSelected, options }: Se
     });
 
     return (
-        <div>
+        <div className={'flex-justify'}>
+            {label === undefined ? null : <span>{label}</span>}
             <input
                 style={{ width: width }}
                 value={value}
