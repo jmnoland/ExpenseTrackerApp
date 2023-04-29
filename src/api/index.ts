@@ -75,6 +75,23 @@ export async function createPaymentType(apiKey: string, clientId: string, body: 
     return await response.json() as PaymentType;
 }
 
+export async function createRecurringExpense(apiKey: string, clientId: string, body: {}): Promise<RecurringExpense> {
+    const response = await fetch(`${appSettings.baseUrl}/api/recurringexpense`, {
+        method: 'POST',
+        mode: "cors",
+        cache: 'no-cache',
+        credentials: 'same-origin',
+        headers: {
+            'Authorization': `Basic ${apiKey}`,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'x-client-id': clientId,
+        },
+        body: JSON.stringify(body),
+    });
+    return await response.json() as RecurringExpense;
+}
+
 export async function getRecurringExpenses(apiKey: string, clientId: string): Promise<RecurringExpense[]> {
     const response = await fetch(`${appSettings.baseUrl}/api/recurringexpense`, {
         method: 'GET',

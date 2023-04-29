@@ -9,7 +9,9 @@ import {
     getPaymentTypes,
     getCategories,
     createExpense,
-    createCategory, createPaymentType,
+    createCategory,
+    createPaymentType,
+    createRecurringExpense,
 } from "../api";
 
 interface IStateContext {
@@ -32,6 +34,7 @@ interface IStateContext {
     createNewExpense: (expense: Expense) => Promise<void>,
     createNewCategory: (name: string) => Promise<void>,
     createNewPaymentType: (paymentType: PaymentType) => Promise<void>,
+    createNewRecurringExpense: (recurringExpense: RecurringExpense) => Promise<void>,
     fetchData: () => Promise<void>,
 }
 
@@ -60,6 +63,7 @@ export const StateContext = createContext<IStateContext>({
     createNewExpense: (expense: Expense) => new Promise(() => {}),
     createNewCategory: (name: string) => new Promise(() => {}),
     createNewPaymentType: (paymentType: PaymentType) => new Promise(() => {}),
+    createNewRecurringExpense: (recurringExpense: RecurringExpense) => new Promise(() => {}),
     fetchData: () => new Promise(() => {}),
 });
 
@@ -99,12 +103,19 @@ export const StateProvider = ({ children }: { children: React.ReactNode }): JSX.
 
     async function createNewExpense(expense: Expense): Promise<void> {
         const response = await createExpense(apiKey, clientId, expense);
+        setExpenses([response].concat(expenses));
     }
     async function createNewCategory(name: string): Promise<void> {
         const response = await createCategory(apiKey, clientId, name);
+        setCategories({ ...categories, [response.categoryId]: response });
     }
     async function createNewPaymentType(paymentType: PaymentType): Promise<void> {
         const response = await createPaymentType(apiKey, clientId, paymentType);
+        setPaymentTypes({ ...paymentTypes, [response.paymentTypeId]: response });
+    }
+    async function createNewRecurringExpense(recurringExpense: RecurringExpense): Promise<void> {
+        const response = await createRecurringExpense(apiKey, clientId, recurringExpense);
+        setRecurringExpenses([response].concat(recurringExpenses));
     }
     async function getSetExpenses(): Promise<void> {
         const response = await getExpenses(apiKey, clientId);
@@ -162,6 +173,7 @@ export const StateProvider = ({ children }: { children: React.ReactNode }): JSX.
                 createNewExpense,
                 createNewCategory,
                 createNewPaymentType,
+                createNewRecurringExpense,
                 fetchData,
             }}
         >

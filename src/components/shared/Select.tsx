@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import { SelectOption } from "../../models/SelectOption";
 
 type SelectProps = {
@@ -12,6 +12,12 @@ type SelectProps = {
 export default function Select({ label, width, initialValue, setSelected, options }: SelectProps): JSX.Element {
     const [value, setValue] = useState('');
     const [displayOptions, setDisplayOptions] = useState(false);
+    const [optionsStyling, setOptionsStyling] = useState({
+        width: width,
+        left: '',
+        top: '',
+    });
+    const inputRef = useRef<HTMLInputElement | null>(null);
 
     useEffect(() => {
         document.removeEventListener('keydown', enterPressed);
@@ -30,6 +36,16 @@ export default function Select({ label, width, initialValue, setSelected, option
             setValue('');
         }
     }, [initialValue]);
+
+    useEffect(() => {
+        if (inputRef.current) {
+            const elem = inputRef.current;
+            if ("getBoundingClientRect" in elem) {
+                const bounds = elem.getBoundingClientRect();
+                setOptionsStyling({ ...optionsStyling, left: `${bounds.left}px`, top: `${bounds.top + 21}px` });
+            }
+        }
+    }, [inputRef]);
 
     function enterPressed(event: any) {
         if (event.keyCode === 13) {
@@ -69,12 +85,13 @@ export default function Select({ label, width, initialValue, setSelected, option
         <div className={'flex-justify'}>
             {label === undefined ? null : <span>{label}</span>}
             <input
+                ref={inputRef}
                 style={{ width: width }}
                 value={value}
                 onFocus={() => setDisplayOptions(true)}
                 onChange={(e) => setValue(e.target.value)}
             />
-            {displayOptions ? <div style={{ width: width }} className={"options-container"}>
+            {displayOptions ? <div style={optionsStyling} className={"options-container"}>
                 {optionElements}
             </div> : null }
         </div>
