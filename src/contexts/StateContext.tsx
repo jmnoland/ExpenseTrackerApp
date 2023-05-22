@@ -91,6 +91,16 @@ export const StateProvider = ({ children }: { children: React.ReactNode }): JSX.
         _setApiKey('');
         setApiKeyExists(false);
         setDataFetched(false);
+        setExpenses([]);
+        setRecurringExpenses([]);
+        setCategories({});
+        setPaymentTypes({});
+        _setSelected({
+            categoryId: null,
+            paymentTypeId: null,
+            expenseId: null,
+            recurringExpenseId: null,
+        });
     }
     function setSelected(value: string | null, keyName: string): void {
         const newSelected = { ...selected, [keyName]: value };
