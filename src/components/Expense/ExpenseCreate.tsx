@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Input, NumberInput, Select } from "../shared";
+import {DatePicker, Input, NumberInput, Select} from "../shared";
 import { StateContext } from "../../contexts/StateContext";
 import { SelectOption } from "../../models/SelectOption";
 import { Expense } from "../../models/Expense";
@@ -10,7 +10,7 @@ export function ExpenseCreateComponent() {
     const [amount, setAmount] = useState(0);
     const [categoryId, setCategoryId] = useState(selected.categoryId ?? '');
     const [paymentTypeId, setPaymentTypeId] = useState(selected.paymentTypeId ?? '');
-    const [date, setDate] = useState(new Date().toISOString());
+    const [date, setDate] = useState(new Date());
     const [categoryOptions, setCategoryOptions] = useState([] as SelectOption[]);
     const [paymentTypeOptions, setPaymentTypeOptions] = useState([] as SelectOption[]);
 
@@ -35,13 +35,13 @@ export function ExpenseCreateComponent() {
     function reset() {
         setName('');
         setAmount(0);
-        setDate(new Date().toISOString());
+        setDate(new Date());
     }
     function save(): void {
         createNewExpense({
             name,
             amount,
-            date: new Date(date),
+            date: date,
             paymentTypeId,
             categoryId
         } as Expense);
@@ -53,7 +53,7 @@ export function ExpenseCreateComponent() {
         <NumberInput label={'Amount'} width={100} value={amount} setValue={setAmount} />
         <Select label={'Category'} width={100} initialValue={categoryId} setSelected={setCategoryId} options={categoryOptions as SelectOption[]} />
         <Select label={'Payment type'} width={100} initialValue={paymentTypeId} setSelected={setPaymentTypeId} options={paymentTypeOptions as SelectOption[]} />
-        <Input label={'Date'} width={170} value={date} setValue={setDate} />
+        <DatePicker label={'Date'} width={170} value={date} setValue={setDate} />
         <div>
           <button onClick={reset}>Reset</button>
           <button onClick={save}>Save</button>
